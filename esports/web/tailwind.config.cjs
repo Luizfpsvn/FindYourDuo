@@ -2,8 +2,10 @@
 module.exports = {
   content: ["./src/**/*.tsx", "./index.html"],
   theme: {
+    fontFamily: {
+      sans: ["Inter", "sans-serif"]
+    },
     extend: {
-      color: {},
       backgroundImage: {
         galaxy: "url('/backgroundGalaxy.png')",
         "nlw-gradient":
