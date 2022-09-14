@@ -1,12 +1,21 @@
 import express from "express"; //Begin project with the new importation type: module
 
+import { PrismaClient } from "@prisma/client";
+
 const app = express();
+
+const prisma = new PrismaClient({
+  log: ["query"]
+});
+
 app.use(express.json());
 
 // HTTP methods / API Restful
 
-app.get("/games", (request, response) => {
-  return response.json([]);
+app.get("/games", async (request, response) => {
+  const games = await prisma.game.findMany();
+
+  return response.json(games);
 });
 
 app.post("/ads", (request, response) => {
