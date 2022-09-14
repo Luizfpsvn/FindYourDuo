@@ -2,6 +2,8 @@ import express from "express"; //Begin project with the new importation type: mo
 
 import { PrismaClient } from "@prisma/client";
 
+import { convertHourStringToMinutes } from "./utils/convert-hour-string-to-minutes";
+
 const app = express();
 
 const prisma = new PrismaClient({
@@ -26,8 +28,24 @@ app.get("/games", async (request, response) => {
   return response.json(games);
 });
 
-app.post("/ads", (request, response) => {
-  return response.status(201).json(["ads"]);
+app.post("/games/:gameId/ads", async (request, response) => {
+  const gameId = request.params.gameId;
+  const body: any = request.body;
+
+  const ad = await prisma.ad.create({
+    data: {
+      gameId,
+      name: body.name,
+      yearsPlaying: body.yearsPlaying,
+      discord: body.discord,
+      weekDays: body.weekDays.join(","),
+      hourStart: convertHourStringToMinutes(body.hourStart),
+      hourEnd: convertHourStringToMinutes(body.hourEnd),
+      useVoiceChannel: body.useVoiceChannel
+    }
+  });
+
+  return response.status(201).json(ad);
 });
 
 app.get("/games/:id/ads", async (request, response) => {
